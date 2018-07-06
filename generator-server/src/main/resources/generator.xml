@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<generator>
+    <methods>
+        <method name="queryGoods" returnType="com.xmxc.generator.model.GoodsEntity">
+            <param package="com.xmxc.generator.controller.GeneratorController"></param>
+            <param package="com.xmxc.generator.generator.InterfaceGenerator"></param>
+        </method>
+
+        <method name="deleteGoods" returnType="java.lang.Long">
+            <param package="com.xmxc.generator.generator.InterfaceGenerator"></param>
+        </method>
+    </methods>
+    <model name="OrderItemEntity" package="com.xmxc.generator.model" table="order_item"
+           filePath="/Users/apple/work/xmxc/code-generator/generator-server/src/main/java/com/xmxc/generator/model"></model>
+    <object>
+        <obj name="OrderItemService" package="com.xmxc.generator.service" type="service"
+                           filePath="/Users/apple/work/xmxc/code-generator/generator-server/src/main/java/com/xmxc/generator/service"></obj>
+        <obj name="OrderItemServiceImpl" package="com.xmxc.generator.service" type="serviceImpl"
+                      filePath="/Users/apple/work/xmxc/code-generator/generator-server/src/main/java/com/xmxc/generator/service"></obj>
+        <obj name="OrderItemDao" package="com.xmxc.generator.dao" type="dao"
+                filePath="/Users/apple/work/xmxc/code-generator/generator-server/src/main/java/com/xmxc/generator/dao"></obj>
+    </object>
+</generator>

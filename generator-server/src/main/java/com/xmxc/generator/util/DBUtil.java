@@ -1,0 +1,91 @@
+package com.xmxc.generator.util;
+
+import org.springframework.stereotype.Component;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Component
+public class DBUtil {
+    public static final String URL = "jdbc:mysql://localhost:3306/order_foods?characterEncoding=utf8&useSSL=true";
+    public static final String USER = "root";
+    public static final String PASSWORD = "root";
+    private static Connection conn = null;
+
+    static {
+        try {
+            //1.加载驱动程序
+            Class.forName("com.mysql.jdbc.Driver");
+            //2. 获得数据库连接
+            conn = DriverManager.getConnection(URL, USER, PASSWORD);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 获取数据库连接
+     *
+     * @return
+     */
+    public static Connection getConnection() {
+        return conn;
+    }
+
+    public List<Map<String, String>> query(String tableName) {
+        List<Map<String, String>> tableData = null;
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        try {
+            conn = getConnection();
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery("select column_name, data_type, column_type, column_comment " +
+                    "from information_schema.columns where table_name='" + tableName + "'");
+
+            tableData = new ArrayList<>();
+            while (rs.next()) {
+                Map<String, String> result = new HashMap<>();
+                result.put("column_name", rs.getString("column_name"));
+                result.put("data_type", rs.getString("data_type"));
+                result.put("column_comment", rs.getString("column_comment"));
+                tableData.add(result);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close(conn, stmt, rs);
+        }
+        return tableData;
+    }
+
+    /**
+     * 关闭连接资源
+     *
+     * @param conn
+     * @param stmt
+     * @param rs
+     */
+    private void close(Connection conn, Statement stmt, ResultSet rs) {
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+}
