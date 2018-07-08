@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <generator>
     <methods>
-        <method name="queryGoods" returnType="com.xmxc.generator.model.GoodsEntity">
+        <method name="queryGoods" returnType="com.xmxc.generator.model.OrderItemEntity">
             <param package="com.xmxc.generator.controller.GeneratorController"></param>
             <param package="com.xmxc.generator.generator.InterfaceGenerator"></param>
         </method>
 
-        <method name="deleteGoods" returnType="java.lang.Long">
+        <method name="deleteGoods" returnType="void">
             <param package="com.xmxc.generator.generator.InterfaceGenerator"></param>
         </method>
     </methods>

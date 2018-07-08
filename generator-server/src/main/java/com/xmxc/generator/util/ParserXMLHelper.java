@@ -17,7 +17,7 @@ public class ParserXMLHelper {
     /**
      * 解析XML文档(method)
      *
-     * @param fileName 文件全路径名称
+     * @param fileName xml文件全路径名称
      */
     private static List<CreateMethodParam> parserMethodsXml(String fileName) {
         File inputXml = new File(fileName);
@@ -50,7 +50,7 @@ public class ParserXMLHelper {
     /**
      * 解析XML文档（model）
      *
-     * @param fileName 文件全路径名称
+     * @param fileName xml文件全路径名称
      */
     private static Map<String, String> parserModelXml(String fileName) {
         File inputXml = new File(fileName);
@@ -73,7 +73,7 @@ public class ParserXMLHelper {
     /**
      * 解析Xml文档（Object）
      *
-     * @param fileName
+     * @param fileName xml文件所在目录
      */
     private List<CreateObjectParam> parserObjectXml(String fileName) {
         File inputXml = new File(fileName);

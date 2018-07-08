@@ -16,7 +16,10 @@ public class EntityGenerator {
     /**
      * 创建实体内容
      *
-     * @param param
+     * @param param       数据库表属性
+     * @param className   文件名
+     * @param packageName 文件所在包
+     * @return
      */
     private static String getModelBody(List<Map<String, String>> param, String className, String packageName) {
         StringBuffer stringBuffer = new StringBuffer();
@@ -131,7 +134,7 @@ public class EntityGenerator {
     /**
      * 获取导入package
      *
-     * @param param
+     * @param param 导包类型集合
      * @return
      */
     private static Set<String> getImportPackage(List<Map<String, String>> param) {

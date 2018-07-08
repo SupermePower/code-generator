@@ -3,9 +3,9 @@ package com.xmxc.generator.util;
 public class StringUtil {
 
     /**
-     * 下划线转化为驼峰
+     * 下划线转化为驼峰、若无下划线则首字母小写
      *
-     * @param name
+     * @param name 转化目标字符串
      * @return
      */
     public static String camelName(String name) {

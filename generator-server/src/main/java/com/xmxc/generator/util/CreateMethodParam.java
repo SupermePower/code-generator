@@ -4,8 +4,11 @@ import java.util.List;
 
 public class CreateMethodParam {
 
+    /**方法名*/
     private String methodName;
+    /**返回类型*/
     private String returnType;
+    /**参数集合*/
     private List<String> paramList;
 
     public CreateMethodParam() {

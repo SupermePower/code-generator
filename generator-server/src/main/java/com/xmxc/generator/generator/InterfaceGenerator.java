@@ -1,11 +1,13 @@
 package com.xmxc.generator.generator;
 
 import com.xmxc.generator.util.CreateFileHelper;
+import com.xmxc.generator.util.CreateMethodParam;
 import com.xmxc.generator.util.FileImportPackageHelper;
+import com.xmxc.generator.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
+import java.util.List;
 
 @Component
 @Slf4j
@@ -15,21 +17,29 @@ public class InterfaceGenerator {
     /**
      * 获取创建文件内容字符串
      *
-     * @param interfaceName        文件名称
-     * @param methodParam     方法参数
-     * @param filePackageName 文件包
+     * @param interfaceName   接口名称
+     * @param methods         方法集合
+     * @param filePackageName 包路径
+     * @param fileType        文件磁盘路径
      * @return
      */
-    private static String getCreateInterfaceStatement(String interfaceName, Map<String, String> methodParam, String filePackageName, String returnType) {
+    private static String getCreateInterfaceStatement(String interfaceName, List<CreateMethodParam> methods, String filePackageName, String fileType) {
         StringBuffer fileContent = new StringBuffer();
-        FileImportPackageHelper.getFileHeader(methodParam, filePackageName, fileContent, "mapper");
-        fileContent.append("@Repository\n");
+        FileImportPackageHelper.getFileHeader(methods, filePackageName, fileContent, fileType);
+        fileContent.append("dao".equals(fileType) ? "@Repository\n" : "");
         fileContent.append("public interface " + interfaceName + " {\n\n");
-        for (String methodName : methodParam.keySet()) {
-            String packageUrl = methodParam.get(methodName);
-            String methodParamType = packageUrl.substring(packageUrl.lastIndexOf(".") + 1);
+        for (CreateMethodParam method : methods) {
+            String returnType = method.getReturnType();
             returnType = returnType.substring(returnType.lastIndexOf(".") + 1);
-            fileContent.append("    " + returnType + " " + methodName + "(" + methodParamType + " param);\n\n");
+            fileContent.append("    " + returnType + " " + method.getMethodName() + "(");
+            String params = "";
+            for (String methodParam : method.getParamList()) {
+                String packageUrl = methodParam;
+                String methodParamType = packageUrl.substring(packageUrl.lastIndexOf(".") + 1);
+                params = methodParamType + " " + StringUtil.camelName(methodParamType) + ", " + params;
+            }
+            fileContent.append("".equals(params) ? "" : params.substring(0, params.length() - 2));
+            fileContent.append(");\n\n");
         }
         fileContent.append("}");
         return fileContent.toString();
@@ -38,14 +48,16 @@ public class InterfaceGenerator {
     /**
      * 创建创建接口
      *
-     * @param classPath 文件创建路径（磁盘目录）
+     * @param filePath     文件磁盘路径
      * @param interfaceName 接口名称
-     * @param packageName 包名
+     * @param packageName   包名
+     * @param methods       方法集合
+     * @param fileType      文件类型
      */
-    public static void createInterface(String classPath, String interfaceName, String packageName, Map<String, String> methodParam, String returnType) {
-        String modelBody = getCreateInterfaceStatement(interfaceName, methodParam, packageName, returnType);
+    public static void createInterface(String filePath, String interfaceName, String packageName, List<CreateMethodParam> methods, String fileType) {
+        String modelBody = getCreateInterfaceStatement(interfaceName, methods, packageName, fileType);
         CreateFileHelper createFileHelper = new CreateFileHelper();
-        createFileHelper.createMapperInterface(interfaceName, classPath, modelBody);
+        createFileHelper.createMapperInterface(interfaceName, filePath, modelBody);
     }
 
 }

@@ -2,9 +2,13 @@ package com.xmxc.generator.util;
 
 public class CreateObjectParam {
 
+    /**文件名*/
     private String fileName;
+    /**包名*/
     private String packageName;
+    /**文件路径*/
     private String filePath;
+    /**文件类型*/
     private String fileType;
 
     public CreateObjectParam() {

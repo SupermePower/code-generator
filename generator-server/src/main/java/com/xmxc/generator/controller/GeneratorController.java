@@ -9,7 +9,6 @@ import com.xmxc.generator.util.ParserXMLHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,57 +20,63 @@ public class GeneratorController {
 
 
     public static void main(String[] args) {
-
-        List<CreateMethodParam> createMethodParam = getCreateMethodParam();
-        System.out.println(createMethodParam);
-
         ParserXMLHelper parserXMLHelper = new ParserXMLHelper();
-        List<CreateObjectParam> createObjectData = parserXMLHelper.getCreateObjectData();
-        System.out.println(createObjectData);
-
-
-        for (CreateObjectParam createObjectParam : createObjectData) {
-            if ("serviceImpl".equals(createObjectParam.getFileType())) {
-                //TODO 创建class实现
-                String filePath = createObjectParam.getFilePath();
-                String fileName = createObjectParam.getFileName();
-            } else if ("service".equals(createObjectParam.getFileType())) {
-                //TODO 业务接口
-            } else if ("dao".equals(createObjectParam.getFileType())) {
-                //TODO dao
-            }
-        }
 
         //TODO 创建Mapper
-//        createInterfaceTest("GoodsMapper", "/Users/apple/work/xmxc/code-generator/generator-server/src/main/java/com/xmxc/generator/mapper", "com.xmxc.generator.mapper");
-//        //TODO 创建Service
-//        createInterfaceTest("GoodsService", "/Users/apple/work/xmxc/code-generator/generator-server/src/main/java/com/xmxc/generator/service", "com.xmxc.generator.service");
-//        //TODO 创建业务实现
-//        createClassTest();
+        createInterface(parserXMLHelper);
+       //TODO 创建业务实现
+        createClassTest();
 
 
         // model创建
-        createModelTest();
+        //createModelTest();
+    }
+
+    /**
+     * 创建dao与service
+     * @param parserXMLHelper
+     */
+    private static void createInterface(ParserXMLHelper parserXMLHelper) {
+        List<CreateObjectParam> createObjectData = parserXMLHelper.getCreateObjectData();
+        for (CreateObjectParam createObjectParam : createObjectData) {
+            if (!"serviceImpl".equals(createObjectParam.getFileType())) {
+                String interfaceName = createObjectParam.getFileName();
+                String filePath = createObjectParam.getFilePath();
+                String filePackage = createObjectParam.getPackageName();
+                String fileType = createObjectParam.getFileType();
+                createInterfaceTest(interfaceName, filePath, filePackage, fileType);
+            }
+        }
     }
 
     /**
      * 创建业务实现类
      */
     private static void createClassTest() {
-        /**--------------xml文件中获取-----------------*/
-        String filePath = "/Users/apple/work/xmxc/code-generator/generator-server/src/main/java/com/xmxc/generator/service";
-        String fileName = "GoodsServiceImpl";
-        String returnType = "com.xmxc.generator.model.GoodsEntity";
-        String callMapperType = "com.xmxc.generator.service.GoodsMapper";
-        String implementsInterface = "GoodsService";
-        Map<String, String> methodParam = new HashMap<>();
-        methodParam.put("queryGoodsList", "java.lang.String");
-        methodParam.put("updateGoods", "com.xmxc.generator.model.GoodsEntity");
-        methodParam.put("deleteGoods", "java.lang.Long");
-        methodParam.put("addGoods", "com.xmxc.generator.model.GoodsEntity");
-        /**-------------------------------------*/
+        String filePath = "";
+        String fileName = "";
+        String callMapperType = "";
+        String callMapperPackage = "";
+        String implementsInterface = "";
         String filePackageName = "com.xmxc.generator.service";
-        ClassGenerator.createClass(filePath, fileName, filePackageName, methodParam, implementsInterface, returnType, callMapperType);
+        ParserXMLHelper parserXMLHelper = new ParserXMLHelper();
+        List<CreateObjectParam> createObjectData = parserXMLHelper.getCreateObjectData();
+        for (CreateObjectParam createObjectParam : createObjectData) {
+            if ("serviceImpl".equals(createObjectParam.getFileType())) {
+                fileName = createObjectParam.getFileName();
+                filePath = createObjectParam.getFilePath();
+                filePackageName = createObjectParam.getPackageName();
+            }
+            if ("service".equals(createObjectParam.getFileType())) {
+                implementsInterface = createObjectParam.getFileName();
+            }
+            if ("dao".equals(createObjectParam.getFileType())) {
+                callMapperType = createObjectParam.getFileName();
+                callMapperPackage = createObjectParam.getPackageName();
+            }
+        }
+        List<CreateMethodParam> createMethodParam = getCreateMethodParam();
+        ClassGenerator.createClass(filePath, fileName, filePackageName, createMethodParam, implementsInterface, callMapperType, callMapperPackage);
     }
 
     /**
@@ -86,14 +91,9 @@ public class GeneratorController {
     /**
      * 创建接口
      */
-    private static void createInterfaceTest(String interfaceName, String filePath, String filePackage) {
-        String returnType = "com.xmxc.generator.model.GoodsEntity";
-        Map<String, String> methodParam = new HashMap<>();
-        methodParam.put("queryGoodsList", "java.lang.String");
-        methodParam.put("updateGoods", "com.xmxc.generator.model.GoodsEntity");
-        methodParam.put("deleteGoods", "java.lang.Long");
-        methodParam.put("addGoods", "com.xmxc.generator.model.GoodsEntity");
-        InterfaceGenerator.createInterface(filePath, interfaceName, filePackage, methodParam, returnType);
+    private static void createInterfaceTest(String interfaceName, String filePath, String filePackage, String fileType) {
+        List<CreateMethodParam> createMethodParam = getCreateMethodParam();
+        InterfaceGenerator.createInterface(filePath, interfaceName, filePackage, createMethodParam, fileType);
     }
 
     /**
