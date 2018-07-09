@@ -21,8 +21,8 @@ public class FileImportPackageHelper {
             for (String param : createMethodParam.getParamList()) {
                 String packageUrl = param;
                 String paramType = packageUrl.substring(packageUrl.lastIndexOf(".") + 1);
-                if (!paramType.equals("byte") && !paramType.equals("short") && !paramType.equals("int") && !paramType.equals("float")
-                        && !paramType.equals("double") && !paramType.equals("char") && !paramType.equals("boolean") && !paramType.equals("long")) {
+                if (!paramType.equalsIgnoreCase("byte") && !paramType.equalsIgnoreCase("short") && !paramType.equalsIgnoreCase("int") && !paramType.equalsIgnoreCase("float")
+                        && !paramType.equalsIgnoreCase("double") && !paramType.equalsIgnoreCase("char") && !paramType.equalsIgnoreCase("boolean") && !paramType.equalsIgnoreCase("long")) {
                     packageSet.add("import " + packageUrl + ";\n\n");
                 }
             }

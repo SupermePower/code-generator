@@ -1,23 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <generator>
+
+    <!--
+        method配置说明：
+        name:方法名称
+        returnType:返回类型
+        param->package:方法参数类型，配置全路径
+    -->
     <methods>
         <method name="queryGoods" returnType="com.xmxc.generator.model.OrderItemEntity">
-            <param package="com.xmxc.generator.controller.GeneratorController"></param>
-            <param package="com.xmxc.generator.generator.InterfaceGenerator"></param>
+            <param package="com.xmxc.generator.controller.GeneratorController"/>
+            <param package="com.xmxc.generator.generator.InterfaceGenerator"/>
         </method>
 
         <method name="deleteGoods" returnType="void">
-            <param package="com.xmxc.generator.generator.InterfaceGenerator"></param>
+            <param package="com.xmxc.generator.generator.InterfaceGenerator"/>
         </method>
     </methods>
-    <model name="OrderItemEntity" package="com.xmxc.generator.model" table="order_item"
-           filePath="/Users/apple/work/xmxc/code-generator/generator-server/src/main/java/com/xmxc/generator/model"></model>
+
+    <!--
+    obj配置说明：
+    name:对象名称
+    package:所在包
+    type:service：业务接口，serviceImpl：业务实现，dao：数据映射接口
+    filePath:文件所在磁盘目录
+    -->
     <object>
         <obj name="OrderItemService" package="com.xmxc.generator.service" type="service"
-                           filePath="/Users/apple/work/xmxc/code-generator/generator-server/src/main/java/com/xmxc/generator/service"></obj>
+             filePath="/Users/apple/work/xmxc/code-generator/generator-server/src/main/java/com/xmxc/generator/service"/>
         <obj name="OrderItemServiceImpl" package="com.xmxc.generator.service" type="serviceImpl"
-                      filePath="/Users/apple/work/xmxc/code-generator/generator-server/src/main/java/com/xmxc/generator/service"></obj>
+             filePath="/Users/apple/work/xmxc/code-generator/generator-server/src/main/java/com/xmxc/generator/service"/>
         <obj name="OrderItemDao" package="com.xmxc.generator.dao" type="dao"
-                filePath="/Users/apple/work/xmxc/code-generator/generator-server/src/main/java/com/xmxc/generator/dao"></obj>
+             filePath="/Users/apple/work/xmxc/code-generator/generator-server/src/main/java/com/xmxc/generator/dao"/>
     </object>
+
+    <!--
+    生成model配置属性含义：
+    name:model名称
+    package:model所在包
+    table:model对应的表
+    filePath:model存储的磁盘目录
+    -->
+    <model name="OrderItemEntity" package="com.xmxc.generator.model" table="order_item"
+           filePath="/Users/apple/work/xmxc/code-generator/generator-server/src/main/java/com/xmxc/generator/model"/>
 </generator>

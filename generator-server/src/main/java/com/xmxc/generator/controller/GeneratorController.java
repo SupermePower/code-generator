@@ -20,12 +20,14 @@ public class GeneratorController {
 
 
     public static void main(String[] args) {
-        ParserXMLHelper parserXMLHelper = new ParserXMLHelper();
+
+        System.out.println("long".equalsIgnoreCase("Long"));
+//        ParserXMLHelper parserXMLHelper = new ParserXMLHelper();
 
         //TODO 创建Mapper
-        createInterface(parserXMLHelper);
-       //TODO 创建业务实现
-        createClassTest();
+//        createInterface(parserXMLHelper);
+        //TODO 创建业务实现
+//        createClassTest();
 
 
         // model创建
@@ -34,6 +36,7 @@ public class GeneratorController {
 
     /**
      * 创建dao与service
+     *
      * @param parserXMLHelper
      */
     private static void createInterface(ParserXMLHelper parserXMLHelper) {

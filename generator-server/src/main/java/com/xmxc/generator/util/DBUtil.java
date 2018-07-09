@@ -10,9 +10,9 @@ import java.util.Map;
 
 @Component
 public class DBUtil {
-    public static final String URL = "jdbc:mysql://localhost:3306/order_foods?characterEncoding=utf8&useSSL=true";
-    public static final String USER = "root";
-    public static final String PASSWORD = "root";
+    public static final String URL = "jdbc:mysql://123.207.25.127:3306/testdinner?characterEncoding=utf8&useSSL=true";
+    public static final String USER = "xmxc";
+    public static final String PASSWORD = "xmxc1234";
     private static Connection conn = null;
 
     static {
@@ -45,7 +45,7 @@ public class DBUtil {
         try {
             conn = getConnection();
             stmt = conn.createStatement();
-            rs = stmt.executeQuery("select column_name, data_type, column_type, column_comment " +
+            rs = stmt.executeQuery("select column_name, data_type, column_type, column_comment, column_key " +
                     "from information_schema.columns where table_name='" + tableName + "'");
 
             tableData = new ArrayList<>();
@@ -54,6 +54,7 @@ public class DBUtil {
                 result.put("column_name", rs.getString("column_name"));
                 result.put("data_type", rs.getString("data_type"));
                 result.put("column_comment", rs.getString("column_comment"));
+                result.put("column_key", rs.getString("column_key"));
                 tableData.add(result);
             }
 

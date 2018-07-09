@@ -1,6 +1,6 @@
 package com.xmxc.generator.generator;
 
-import com.xmxc.generator.util.CreateFileHelper;
+import com.xmxc.generator.util.FileHelper;
 import com.xmxc.generator.util.DBUtil;
 import com.xmxc.generator.util.StringUtil;
 
@@ -49,8 +49,8 @@ public class EntityGenerator {
         DBUtil dbUtil = new DBUtil();
         List<Map<String, String>> tableData = dbUtil.query(createModelData.get("table"));
         String modelBody = getModelBody(tableData, createModelData.get("name"), createModelData.get("package"));
-        CreateFileHelper createFileHelper = new CreateFileHelper();
-        createFileHelper.createMapperInterface(createModelData.get("name"), createModelData.get("filePath"), modelBody);
+        FileHelper fileHelper = new FileHelper();
+        fileHelper.createMapperInterface(createModelData.get("name"), createModelData.get("filePath"), modelBody);
     }
 
     /**

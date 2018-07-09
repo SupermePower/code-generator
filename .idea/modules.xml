@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/code-generator.iml" filepath="$PROJECT_DIR$/.idea/code-generator.iml" />
-      <module fileurl="file://$PROJECT_DIR$/generator-server/generator-server.iml" filepath="$PROJECT_DIR$/generator-server/generator-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/generator-server/code-generator.iml" filepath="$PROJECT_DIR$/generator-server/code-generator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/generator-server/src/main/main.iml" filepath="$PROJECT_DIR$/generator-server/src/main/main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/generator-server/src/test/test.iml" filepath="$PROJECT_DIR$/generator-server/src/test/test.iml" />
     </modules>
   </component>
 </project>

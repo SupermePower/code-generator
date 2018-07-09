@@ -1,6 +1,6 @@
 package com.xmxc.generator.generator;
 
-import com.xmxc.generator.util.CreateFileHelper;
+import com.xmxc.generator.util.FileHelper;
 import com.xmxc.generator.util.CreateMethodParam;
 import com.xmxc.generator.util.FileImportPackageHelper;
 import com.xmxc.generator.util.StringUtil;
@@ -84,7 +84,7 @@ public class ClassGenerator {
     public static void createClass(String filePath, String className, String packageName, List<CreateMethodParam> methods,
                                    String implementsInterface, String callMapperType, String callMapperPackage) {
         String modelBody = getCreateClassStatement(className, methods, packageName, implementsInterface, callMapperType, callMapperPackage);
-        CreateFileHelper createFileHelper = new CreateFileHelper();
-        createFileHelper.createMapperInterface(className, filePath, modelBody);
+        FileHelper fileHelper = new FileHelper();
+        fileHelper.createMapperInterface(className, filePath, modelBody);
     }
 }
