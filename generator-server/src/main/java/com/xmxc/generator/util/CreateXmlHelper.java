@@ -27,7 +27,22 @@ public class CreateXmlHelper {
         //创建一个名为students的节点，因为是第一个创建，所以是根节点,再通过doc创建一个则会报错。
         Element mapper = doc.addElement("mapper");
         mapper.addAttribute("namespace", namespace);
+
+        //获取result集合
         getResultMapper(tableData, modelName, mapper);
+
+        //获取根据主键获取元素信息
+        Element select = mapper.addElement("select");
+        select.addAttribute("id", "selectXXXById");
+        select.addAttribute("parameterType", "int");
+        select.addAttribute("resultType", "com.xmxc.generator.Demo");
+        select.setText("select * from " + "tableName" + " where id = #{id}");
+        //删除
+        Element delete = mapper.addElement("delete");
+        delete.addAttribute("id", "deleteById");
+        delete.addAttribute("parameterType", "int");
+        delete.setText("update tableName set is_del = '0' " + " where id = #{id}");
+
         //将xml对象写入文件
         FileHelper fileHelper = new FileHelper();
         fileHelper.writeXml(doc, filePath, fileName);

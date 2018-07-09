@@ -89,7 +89,7 @@ public class FileHelper {
             writer.write(doc);
             log.info("生成mybatis映射XML文件成功");
         } catch (IOException e) {
-            log.error("生成mybatis映射XML文件SS失败", e);
+            log.error("生成mybatis映射XML文件失败", e);
         } finally {
             try {
                 if (writer != null) {
