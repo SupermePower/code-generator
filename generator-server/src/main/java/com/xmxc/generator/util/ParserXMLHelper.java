@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.util.*;
 
-@Component
 @Slf4j
 public class ParserXMLHelper {
 

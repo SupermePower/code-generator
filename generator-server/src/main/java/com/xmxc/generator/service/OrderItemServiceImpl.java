@@ -1,10 +1,12 @@
 package com.xmxc.generator.service ;
 
-import com.xmxc.generator.model.OrderItemEntity;
-
 import com.xmxc.generator.test.GeneratorTest;
 
+import com.xmxc.generator.model.OrderItemEntity;
+
 import com.xmxc.generator.generator.InterfaceGenerator;
+
+import java.lang.String;
 
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +23,8 @@ public class OrderItemServiceImpl implements OrderItemService {
         return orderItemDao.queryGoods(interfaceGenerator, generatorTest);
     }
 
-    public void deleteGoods(InterfaceGenerator interfaceGenerator) {
-        orderItemDao.deleteGoods(interfaceGenerator);
+    public void deleteGoods(String string) {
+        orderItemDao.deleteGoods(string);
     }
 
 }

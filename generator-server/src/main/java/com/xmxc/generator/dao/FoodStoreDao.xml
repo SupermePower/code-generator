@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<mapper namespace="com.xmxc.generator.dao.FoodStoreDao">
+  <resultMap id="foodStoreDao" type="com.xmxc.generator.model.FoodStoreEntity">
+    <id column="c_id" property="cId"/>
+    <result column="n_user_id" property="nUserId"/>
+    <result column="c_store_name" property="cStoreName"/>
+    <result column="c_avatar" property="cAvatar"/>
+    <result column="c_banner_string" property="cBannerString"/>
+    <result column="c_describe" property="cDescribe"/>
+    <result column="c_province" property="cProvince"/>
+    <result column="c_city" property="cCity"/>
+    <result column="c_district" property="cDistrict"/>
+    <result column="c_longitude" property="cLongitude"/>
+    <result column="c_latitude" property="cLatitude"/>
+    <result column="c_address" property="cAddress"/>
+    <result column="c_house_umber" property="cHouseUmber"/>
+    <result column="c_start_time" property="cStartTime"/>
+    <result column="c_end_time" property="cEndTime"/>
+    <result column="c_contact" property="cContact"/>
+    <result column="n_start_price" property="nStartPrice"/>
+    <result column="n_delivery_price" property="nDeliveryPrice"/>
+    <result column="n_apiece_price" property="nApiecePrice"/>
+    <result column="n_phone_number" property="nPhoneNumber"/>
+    <result column="n_auto_order" property="nAutoOrder"/>
+    <result column="c_geohash" property="cGeohash"/>
+    <result column="n_dine" property="nDine"/>
+    <result column="n_takeAway" property="nTakeaway"/>
+    <result column="n_pickUp" property="nPickup"/>
+    <result column="d_delivery_distancee" property="dDeliveryDistancee"/>
+    <result column="c_dada_source" property="cDadaSource"/>
+    <result column="n_status" property="nStatus"/>
+    <result column="n_delete" property="nDelete"/>
+    <result column="n_create_time" property="nCreateTime"/>
+    <result column="n_update_time" property="nUpdateTime"/>
+  </resultMap>
+  <select id="queryFoodStore" parameterType="int" resultType="com.xmxc.generator.model.FoodStoreEntity"><![CDATA[ 
+ select * from  where id = #{id} ]]></select>
+  <delete id="deleteById" parameterType="java.lang.String"><![CDATA[ 
+ update  set is_del = '0'  where id = #{id} ]]></delete>
+</mapper>

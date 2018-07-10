@@ -38,15 +38,17 @@ public class CreateXmlHelper {
                 Element select = mapper.addElement("select");
                 select.addAttribute("id", methodName);
                 select.addAttribute("parameterType", "int");
-                select.addAttribute("resultType", "com.xmxc.generator.Demo");
-                select.setText("<![CDATA[ select * from " + tableName + " where id = #{id} ]]>");
+                select.addAttribute("resultType", createMethodParam.getReturnType());
+                select.addCDATA(" \n select * from " + tableName + " where id = #{id} ");
             }
             //删除
             if (methodName.startsWith("del")) {
                 Element delete = mapper.addElement("delete");
                 delete.addAttribute("id", "deleteById");
-                delete.addAttribute("parameterType", "int");
-                delete.addElement( "<![CDATA[ update " + tableName + " set is_del = '0' " + " where id = #{id} ]]>");
+                if (createMethodParam.getParamList().size() == 1) {
+                    delete.addAttribute("parameterType", createMethodParam.getParamList().get(0));
+                    delete.addCDATA(" \n update " + tableName + " set is_del = '0' " + " where id = #{id} ");
+                }
             }
         }
         //将xml对象写入文件

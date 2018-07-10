@@ -12,7 +12,6 @@ import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 
 @Slf4j
-@Component
 public class FileHelper {
 
     /**

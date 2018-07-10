@@ -4,77 +4,78 @@ import com.xmxc.generator.generator.ClassGenerator;
 import com.xmxc.generator.generator.EntityGenerator;
 import com.xmxc.generator.generator.InterfaceGenerator;
 import com.xmxc.generator.util.*;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@Slf4j
 public class GeneratorTest {
-
-    @Autowired
-    private InterfaceGenerator interfaceGenerator;
 
 
     public static void main(String[] args) {
 
         ParserXMLHelper parserXMLHelper = new ParserXMLHelper();
 
+        // 读取xml中创建方法配置
+        List<CreateMethodParam> createMethodParams = parserXMLHelper.getCreateMethodsData();
+
+        // 读取xml中创建对象配置
+        List<CreateObjectParam> createObjectData = parserXMLHelper.getCreateObjectData();
+
         // 创建业务接口，数据映射接口
-//        createInterface(parserXMLHelper);
+        createInterface(createObjectData, createMethodParams);
+
         // 创建业务实现
-//        createClassTest();
+        createClassTest(createObjectData, createMethodParams);
+
+        // 获取创建model数据
+        Map<String, String> createModelData = parserXMLHelper.getCreateModelData();
+
+        // 获取数据库表结构相关数据
+        List<Map<String, String>> mapList = DBUtil.query(createModelData.get("table"));
 
         // model创建
-        //createModelTest()
+        createModelTest(createModelData, mapList);
 
-        //  创建mpper映射文件
-        createMapperXmlTest(parserXMLHelper);
+        // 创建mpper映射文件
+        createMapperXmlTest(mapList, createMethodParams, createObjectData, createModelData);
     }
 
     /**
      * 创建数据映射xml文件
      *
-     * @param parserXMLHelper
+     * @param mapList
+     * @param createMethodParams
+     * @param createObjectData
      */
-    private static void createMapperXmlTest(ParserXMLHelper parserXMLHelper) {
+    private static void createMapperXmlTest(List<Map<String, String>> mapList, List<CreateMethodParam> createMethodParams, List<CreateObjectParam> createObjectData, Map<String, String> createModelData) {
         String namespace = "";
         String fileName = "";
         String filePath = "";
         String modelName = "";
-        List<CreateMethodParam> createMethodParams = parserXMLHelper.getCreateMethodsData();
         String tableName = "";
-        List<CreateObjectParam> createObjectData = parserXMLHelper.getCreateObjectData();
         for (CreateObjectParam createObjectParam : createObjectData) {
             if ("dao".equals(createObjectParam.getFileType())) {
                 fileName = createObjectParam.getFileName() + ".xml";
                 filePath = createObjectParam.getFilePath();
                 namespace = createObjectParam.getPackageName() + "." + createObjectParam.getFileName();
+                modelName = createModelData.get("package") + "." + createModelData.get("name");
             }
         }
-        Map<String, String> createModelData = parserXMLHelper.getCreateModelData();
-        modelName = createModelData.get("package") + "." + createModelData.get("name");
-        tableName = createModelData.get("table");
-        List<Map<String, String>> mapList = DBUtil.query(tableName);
         CreateXmlHelper.createMapperXml(namespace, mapList, fileName, filePath, modelName, createMethodParams, tableName);
     }
 
     /**
      * 创建dao与service
      *
-     * @param parserXMLHelper
+     * @param createObjectData
      */
-    private static void createInterface(ParserXMLHelper parserXMLHelper) {
-        List<CreateObjectParam> createObjectData = parserXMLHelper.getCreateObjectData();
+    private static void createInterface(List<CreateObjectParam> createObjectData, List<CreateMethodParam> createMethodParam) {
         for (CreateObjectParam createObjectParam : createObjectData) {
             if (!"serviceImpl".equals(createObjectParam.getFileType())) {
                 String interfaceName = createObjectParam.getFileName();
                 String filePath = createObjectParam.getFilePath();
                 String filePackage = createObjectParam.getPackageName();
                 String fileType = createObjectParam.getFileType();
-                createInterfaceTest(interfaceName, filePath, filePackage, fileType);
+                createInterfaceTest(interfaceName, filePath, filePackage, fileType, createMethodParam);
             }
         }
     }
@@ -82,15 +83,13 @@ public class GeneratorTest {
     /**
      * 创建业务实现类
      */
-    private static void createClassTest() {
+    private static void createClassTest(List<CreateObjectParam> createObjectData, List<CreateMethodParam> createMethodParam) {
         String filePath = "";
         String fileName = "";
         String callMapperType = "";
         String callMapperPackage = "";
         String implementsInterface = "";
-        String filePackageName = "com.xmxc.generator.service";
-        ParserXMLHelper parserXMLHelper = new ParserXMLHelper();
-        List<CreateObjectParam> createObjectData = parserXMLHelper.getCreateObjectData();
+        String filePackageName = "";
         for (CreateObjectParam createObjectParam : createObjectData) {
             if ("serviceImpl".equals(createObjectParam.getFileType())) {
                 fileName = createObjectParam.getFileName();
@@ -105,34 +104,21 @@ public class GeneratorTest {
                 callMapperPackage = createObjectParam.getPackageName();
             }
         }
-        List<CreateMethodParam> createMethodParam = getCreateMethodParam();
         ClassGenerator.createClass(filePath, fileName, filePackageName, createMethodParam, implementsInterface, callMapperType, callMapperPackage);
     }
 
     /**
      * 创建实体
      */
-    private static void createModelTest() {
-        ParserXMLHelper parserXMLHelper = new ParserXMLHelper();
-        Map<String, String> createModelData = parserXMLHelper.getCreateModelData();
-        EntityGenerator.createModel(createModelData);
+    private static void createModelTest(Map<String, String> createModelData, List<Map<String, String>> tableData) {
+        EntityGenerator.createModel(createModelData, tableData);
     }
 
     /**
      * 创建接口
      */
-    private static void createInterfaceTest(String interfaceName, String filePath, String filePackage, String fileType) {
-        List<CreateMethodParam> createMethodParam = getCreateMethodParam();
+    private static void createInterfaceTest(String interfaceName, String filePath, String filePackage, String fileType, List<CreateMethodParam> createMethodParam) {
         InterfaceGenerator.createInterface(filePath, interfaceName, filePackage, createMethodParam, fileType);
     }
 
-    /**
-     * 获取创建方法数据
-     *
-     * @return
-     */
-    private static List<CreateMethodParam> getCreateMethodParam() {
-        ParserXMLHelper parserXMLHelper = new ParserXMLHelper();
-        return parserXMLHelper.getCreateMethodsData();
-    }
 }

@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 @Setter
 @Getter
-public class OrderItemEntity {
+public class FoodStoreEntity {
    /**店铺id*/
    private String cId;
    /**用户ID*/

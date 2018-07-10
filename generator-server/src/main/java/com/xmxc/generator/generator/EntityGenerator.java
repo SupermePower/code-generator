@@ -45,9 +45,7 @@ public class EntityGenerator {
      *
      * @param createModelData
      */
-    public static void createModel(Map<String, String> createModelData) {
-        DBUtil dbUtil = new DBUtil();
-        List<Map<String, String>> tableData = dbUtil.query(createModelData.get("table"));
+    public static void createModel(Map<String, String> createModelData, List<Map<String, String>> tableData) {
         String modelBody = getModelBody(tableData, createModelData.get("name"), createModelData.get("package"));
         FileHelper fileHelper = new FileHelper();
         fileHelper.createMapperInterface(createModelData.get("name"), createModelData.get("filePath"), modelBody);
