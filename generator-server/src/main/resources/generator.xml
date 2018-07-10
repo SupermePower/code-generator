@@ -9,7 +9,7 @@
     -->
     <methods>
         <method name="queryGoods" returnType="com.xmxc.generator.model.OrderItemEntity">
-            <param package="com.xmxc.generator.controller.GeneratorController"/>
+            <param package="com.xmxc.generator.test.GeneratorTest"/>
             <param package="com.xmxc.generator.generator.InterfaceGenerator"/>
         </method>
 
@@ -19,28 +19,28 @@
     </methods>
 
     <!--
-    obj配置说明：
-    name:对象名称
-    package:所在包
-    type:service：业务接口，serviceImpl：业务实现，dao：数据映射接口
-    filePath:文件所在磁盘目录
+        obj配置说明：
+        name:对象名称
+        package:所在包
+        type:service：业务接口，serviceImpl：业务实现，dao：数据映射接口
+        filePath:文件所在磁盘目录
     -->
     <object>
         <obj name="OrderItemService" package="com.xmxc.generator.service" type="service"
-             filePath="/Users/apple/work/xmxc/code-generator/generator-server/src/main/java/com/xmxc/generator/service"/>
+             filePath="E:\work\generator\generator-server\src\main\java\com\xmxc\generator\service"/>
         <obj name="OrderItemServiceImpl" package="com.xmxc.generator.service" type="serviceImpl"
-             filePath="/Users/apple/work/xmxc/code-generator/generator-server/src/main/java/com/xmxc/generator/service"/>
+             filePath="E:\work\generator\generator-server\src\main\java\com\xmxc\generator\service"/>
         <obj name="OrderItemDao" package="com.xmxc.generator.dao" type="dao"
-             filePath="/Users/apple/work/xmxc/code-generator/generator-server/src/main/java/com/xmxc/generator/dao"/>
+             filePath="E:\work\generator\generator-server\src\main\java\com\xmxc\generator\dao"/>
     </object>
 
     <!--
-    生成model配置属性含义：
-    name:model名称
-    package:model所在包
-    table:model对应的表
-    filePath:model存储的磁盘目录
+        生成model配置属性含义：
+        name:model名称
+        package:model所在包
+        table:model对应的表
+        filePath:model存储的磁盘目录
     -->
-    <model name="OrderItemEntity" package="com.xmxc.generator.model" table="order_item"
-           filePath="/Users/apple/work/xmxc/code-generator/generator-server/src/main/java/com/xmxc/generator/model"/>
+    <model name="OrderItemEntity" package="com.xmxc.generator.model" table="t_food_store"
+           filePath="E:\work\generator\generator-server\src\main\java\com\xmxc\generator\model"/>
 </generator>

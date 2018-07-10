@@ -37,7 +37,7 @@ public class DBUtil {
         return conn;
     }
 
-    public List<Map<String, String>> query(String tableName) {
+    public static List<Map<String, String>> query(String tableName) {
         List<Map<String, String>> tableData = null;
         Connection conn = null;
         Statement stmt = null;
@@ -73,7 +73,7 @@ public class DBUtil {
      * @param stmt
      * @param rs
      */
-    private void close(Connection conn, Statement stmt, ResultSet rs) {
+    private static void close(Connection conn, Statement stmt, ResultSet rs) {
         try {
             if (rs != null) {
                 rs.close();

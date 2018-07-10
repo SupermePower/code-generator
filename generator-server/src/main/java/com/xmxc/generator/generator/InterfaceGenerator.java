@@ -48,7 +48,7 @@ public class InterfaceGenerator {
     /**
      * 创建创建接口
      *
-     * @param filePath     文件磁盘路径
+     * @param filePath      文件磁盘路径
      * @param interfaceName 接口名称
      * @param packageName   包名
      * @param methods       方法集合

@@ -1,19 +1,18 @@
-package com.xmxc.generator.controller;
+package com.xmxc.generator.test;
 
 import com.xmxc.generator.generator.ClassGenerator;
 import com.xmxc.generator.generator.EntityGenerator;
 import com.xmxc.generator.generator.InterfaceGenerator;
-import com.xmxc.generator.util.CreateMethodParam;
-import com.xmxc.generator.util.CreateObjectParam;
-import com.xmxc.generator.util.ParserXMLHelper;
+import com.xmxc.generator.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 @Slf4j
-public class GeneratorController {
+public class GeneratorTest {
 
     @Autowired
     private InterfaceGenerator interfaceGenerator;
@@ -21,17 +20,45 @@ public class GeneratorController {
 
     public static void main(String[] args) {
 
-        System.out.println("long".equalsIgnoreCase("Long"));
-//        ParserXMLHelper parserXMLHelper = new ParserXMLHelper();
+        ParserXMLHelper parserXMLHelper = new ParserXMLHelper();
 
-        //TODO 创建Mapper
+        // 创建业务接口，数据映射接口
 //        createInterface(parserXMLHelper);
-        //TODO 创建业务实现
+        // 创建业务实现
 //        createClassTest();
 
-
         // model创建
-        //createModelTest();
+        //createModelTest()
+
+        //  创建mpper映射文件
+        createMapperXmlTest(parserXMLHelper);
+    }
+
+    /**
+     * 创建数据映射xml文件
+     *
+     * @param parserXMLHelper
+     */
+    private static void createMapperXmlTest(ParserXMLHelper parserXMLHelper) {
+        String namespace = "";
+        String fileName = "";
+        String filePath = "";
+        String modelName = "";
+        List<CreateMethodParam> createMethodParams = parserXMLHelper.getCreateMethodsData();
+        String tableName = "";
+        List<CreateObjectParam> createObjectData = parserXMLHelper.getCreateObjectData();
+        for (CreateObjectParam createObjectParam : createObjectData) {
+            if ("dao".equals(createObjectParam.getFileType())) {
+                fileName = createObjectParam.getFileName() + ".xml";
+                filePath = createObjectParam.getFilePath();
+                namespace = createObjectParam.getPackageName() + "." + createObjectParam.getFileName();
+            }
+        }
+        Map<String, String> createModelData = parserXMLHelper.getCreateModelData();
+        modelName = createModelData.get("package") + "." + createModelData.get("name");
+        tableName = createModelData.get("table");
+        List<Map<String, String>> mapList = DBUtil.query(tableName);
+        CreateXmlHelper.createMapperXml(namespace, mapList, fileName, filePath, modelName, createMethodParams, tableName);
     }
 
     /**

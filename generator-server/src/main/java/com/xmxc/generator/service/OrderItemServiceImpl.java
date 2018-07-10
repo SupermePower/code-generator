@@ -2,7 +2,7 @@ package com.xmxc.generator.service ;
 
 import com.xmxc.generator.model.OrderItemEntity;
 
-import com.xmxc.generator.controller.GeneratorController;
+import com.xmxc.generator.test.GeneratorTest;
 
 import com.xmxc.generator.generator.InterfaceGenerator;
 
@@ -17,8 +17,8 @@ public class OrderItemServiceImpl implements OrderItemService {
     @Autowired
     private OrderItemDao orderItemDao;
 
-    public OrderItemEntity queryGoods(InterfaceGenerator interfaceGenerator, GeneratorController generatorController) {
-        return orderItemDao.queryGoods(interfaceGenerator, generatorController);
+    public OrderItemEntity queryGoods(InterfaceGenerator interfaceGenerator, GeneratorTest generatorTest) {
+        return orderItemDao.queryGoods(interfaceGenerator, generatorTest);
     }
 
     public void deleteGoods(InterfaceGenerator interfaceGenerator) {

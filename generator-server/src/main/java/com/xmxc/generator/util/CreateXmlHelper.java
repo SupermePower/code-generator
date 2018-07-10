@@ -21,28 +21,34 @@ public class CreateXmlHelper {
      * @param namespace
      * @param modelName
      */
-    private void createXml(List<Map<String, String>> tableData, String filePath, String fileName, String namespace, String modelName) {
+    private static void createXml(List<Map<String, String>> tableData, String filePath, String fileName, String namespace, String modelName, List<CreateMethodParam> methods, String tableName) {
         //创建一个xml文档
         Document doc = DocumentHelper.createDocument();
-        //创建一个名为students的节点，因为是第一个创建，所以是根节点,再通过doc创建一个则会报错。
+        //创建一个名为mapper的节点，因为是第一个创建，所以是根节点,再通过doc创建一个则会报错。
         Element mapper = doc.addElement("mapper");
         mapper.addAttribute("namespace", namespace);
 
         //获取result集合
-        getResultMapper(tableData, modelName, mapper);
+        getResultMapper(tableData, modelName, mapper, fileName);
 
-        //获取根据主键获取元素信息
-        Element select = mapper.addElement("select");
-        select.addAttribute("id", "selectXXXById");
-        select.addAttribute("parameterType", "int");
-        select.addAttribute("resultType", "com.xmxc.generator.Demo");
-        select.setText("select * from " + "tableName" + " where id = #{id}");
-        //删除
-        Element delete = mapper.addElement("delete");
-        delete.addAttribute("id", "deleteById");
-        delete.addAttribute("parameterType", "int");
-        delete.setText("update tableName set is_del = '0' " + " where id = #{id}");
-
+        for (CreateMethodParam createMethodParam : methods) {
+            //获取根据主键获取元素信息
+            String methodName = createMethodParam.getMethodName();
+            if (methodName.startsWith("query") || methodName.startsWith("get") || methodName.startsWith("select")) {
+                Element select = mapper.addElement("select");
+                select.addAttribute("id", methodName);
+                select.addAttribute("parameterType", "int");
+                select.addAttribute("resultType", "com.xmxc.generator.Demo");
+                select.setText("<![CDATA[ select * from " + tableName + " where id = #{id} ]]>");
+            }
+            //删除
+            if (methodName.startsWith("del")) {
+                Element delete = mapper.addElement("delete");
+                delete.addAttribute("id", "deleteById");
+                delete.addAttribute("parameterType", "int");
+                delete.addElement( "<![CDATA[ update " + tableName + " set is_del = '0' " + " where id = #{id} ]]>");
+            }
+        }
         //将xml对象写入文件
         FileHelper fileHelper = new FileHelper();
         fileHelper.writeXml(doc, filePath, fileName);
@@ -55,15 +61,14 @@ public class CreateXmlHelper {
      * @param modelName
      * @param mapper
      */
-    private void getResultMapper(List<Map<String, String>> tableData, String modelName, Element mapper) {
+    private static void getResultMapper(List<Map<String, String>> tableData, String modelName, Element mapper, String fileName) {
         //在mapper节点下创建一个名为resultMap的节点
         Element resultMap = mapper.addElement("resultMap");
         //给resultMap节点添加属性
-        resultMap.addAttribute("id", "userOrderMap");
-        resultMap.addAttribute("type", StringUtil.camelName(modelName));
+        resultMap.addAttribute("id", StringUtil.camelName(fileName).substring(0, StringUtil.camelName(fileName).indexOf(".")));
+        resultMap.addAttribute("type", modelName);
         for (Map<String, String> map : tableData) {
             if ("PRI".equals(map.get("column_key"))) {
-                //添加字段映射（主键）
                 Element id = resultMap.addElement("id");
                 id.addAttribute("column", map.get("column_name"));
                 id.addAttribute("property", StringUtil.camelName(map.get("column_name")));
@@ -76,16 +81,18 @@ public class CreateXmlHelper {
         }
     }
 
-    public static void main(String[] args) {
-        String namespace = "com.xiongmaoxingchu.shop.wxminiprogramorder.dao.OrderMapper";
-        String mapperType = "";
-        String id = "";
-        String tableName = "t_food_store";
-        String fileName = "test.xml";
-        String filePath = "E:/work/test";
-        String modelName = "com.xiongmaoxingchu.shop.wxminiprogramorder.model.vo.OrderVo";
-        CreateXmlHelper xml = new CreateXmlHelper();
-        DBUtil dbUtil = new DBUtil();
-        xml.createXml(dbUtil.query(tableName), filePath, fileName, namespace, modelName);
+    /**
+     * 创建xml映射文件
+     *
+     * @param namespace
+     * @param mapList
+     * @param fileName
+     * @param filePath
+     * @param modelName
+     * @param methods
+     * @param tableName
+     */
+    public static void createMapperXml(String namespace, List<Map<String, String>> mapList, String fileName, String filePath, String modelName, List<CreateMethodParam> methods, String tableName) {
+        createXml(mapList, filePath, fileName, namespace, modelName, methods, tableName);
     }
 }
