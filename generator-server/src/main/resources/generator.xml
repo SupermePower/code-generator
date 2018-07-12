@@ -9,7 +9,7 @@
     -->
     <methods>
         <method name="queryFoodStore" returnType="com.xmxc.generator.model.FoodStoreEntity">
-            <param package="com.xmxc.generator.test.GeneratorTest"/>
+            <param package="java.lang.String" name="code"/>
             <param package="com.xmxc.generator.generator.InterfaceGenerator"/>
         </method>
 
@@ -27,11 +27,11 @@
     -->
     <object>
         <obj name="FoodStoreService" package="com.xmxc.generator.service" type="service"
-             filePath="E:\generator\code-generator\generator-server\src\main\java\com\xmxc\generator\service"/>
+             filePath="E:\work\generator\generator-server\src\main\java\com\xmxc\generator\service"/>
         <obj name="FoodStoreServiceImpl" package="com.xmxc.generator.service" type="serviceImpl"
-             filePath="E:\generator\code-generator\generator-server\src\main\java\com\xmxc\generator\service"/>
+             filePath="E:\work\generator\generator-server\src\main\java\com\xmxc\generator\service"/>
         <obj name="FoodStoreDao" package="com.xmxc.generator.dao" type="dao"
-             filePath="E:\generator\code-generator\generator-server\src\main\java\com\xmxc\generator\dao"/>
+             filePath="E:\work\generator\generator-server\src\main\java\com\xmxc\generator\dao"/>
     </object>
 
     <!--
@@ -41,6 +41,6 @@
         table:model对应的表
         filePath:model存储的磁盘目录
     -->
-    <model name="FoodStoreEntity" package="com.xmxc.generator.model" table="t_food_store"
-           filePath="E:\generator\code-generator\generator-server\src\main\java\com\xmxc\generator\model"/>
+    <model name="SiteRecordReference" package="com.xmxc.generator.model" table="t_site_record_reference"
+           filePath="E:\work\generator\generator-server\src\main\java\com\xmxc\generator\model"/>
 </generator>

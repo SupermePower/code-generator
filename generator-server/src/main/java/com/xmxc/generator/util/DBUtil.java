@@ -10,8 +10,8 @@ import java.util.Map;
 
 @Component
 public class DBUtil {
-    public static final String URL = "jdbc:mysql://123.207.25.127:3306/testdinner?characterEncoding=utf8&useSSL=true";
-    public static final String USER = "xmxc";
+    public static final String URL = "jdbc:mysql://39.104.182.12:3306/sitedevelopment?useUnicode=true&amp;characterEncoding=UTF-8&useSSL=false";
+    public static final String USER = "root";
     public static final String PASSWORD = "xmxc1234";
     private static Connection conn = null;
 

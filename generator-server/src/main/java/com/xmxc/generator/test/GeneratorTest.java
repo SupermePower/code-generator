@@ -15,28 +15,28 @@ public class GeneratorTest {
         ParserXMLHelper parserXMLHelper = new ParserXMLHelper();
 
         // 读取xml中创建方法配置
-        List<CreateMethodParam> createMethodParams = parserXMLHelper.getCreateMethodsData();
-
-        // 读取xml中创建对象配置
-        List<CreateObjectParam> createObjectData = parserXMLHelper.getCreateObjectData();
-
-        // 创建业务接口，数据映射接口
-        createInterface(createObjectData, createMethodParams);
-
-        // 创建业务实现
-        createClassTest(createObjectData, createMethodParams);
-
-        // 获取创建model数据
+//        List<CreateMethodParam> createMethodParams = parserXMLHelper.getCreateMethodsData();
+//
+//        // 读取xml中创建对象配置
+//        List<CreateObjectParam> createObjectData = parserXMLHelper.getCreateObjectData();
+//
+//        // 创建业务接口，数据映射接口
+//        createInterface(createObjectData, createMethodParams);
+//
+//        // 创建业务实现
+//        createClassTest(createObjectData, createMethodParams);
+//
+//        // 获取创建model数据
         Map<String, String> createModelData = parserXMLHelper.getCreateModelData();
-
-        // 获取数据库表结构相关数据
+//
+//        // 获取数据库表结构相关数据
         List<Map<String, String>> mapList = DBUtil.query(createModelData.get("table"));
 
         // model创建
         createModelTest(createModelData, mapList);
 
         // 创建mpper映射文件
-        createMapperXmlTest(mapList, createMethodParams, createObjectData, createModelData);
+//        createMapperXmlTest(mapList, createMethodParams, createObjectData, createModelData);
     }
 
     /**
