@@ -8,12 +8,12 @@
         param->package:方法参数类型，配置全路径
     -->
     <methods>
-        <method name="queryFoodStore" returnType="com.xmxc.generator.model.FoodStoreEntity">
+        <method name="querySiteRecordReference" returnType="com.xmxc.generator.model.SiteRecordReference">
             <param package="java.lang.String" name="code"/>
             <param package="com.xmxc.generator.generator.InterfaceGenerator"/>
         </method>
 
-        <method name="deleteFoodStore" returnType="void">
+        <method name="deleteSiteRecordReference" returnType="void">
             <param package="java.lang.String"/>
         </method>
     </methods>
@@ -26,12 +26,12 @@
         filePath:文件所在磁盘目录
     -->
     <object>
-        <obj name="FoodStoreService" package="com.xmxc.generator.service" type="service"
-             filePath="E:\work\generator\generator-server\src\main\java\com\xmxc\generator\service"/>
-        <obj name="FoodStoreServiceImpl" package="com.xmxc.generator.service" type="serviceImpl"
-             filePath="E:\work\generator\generator-server\src\main\java\com\xmxc\generator\service"/>
-        <obj name="FoodStoreDao" package="com.xmxc.generator.dao" type="dao"
-             filePath="E:\work\generator\generator-server\src\main\java\com\xmxc\generator\dao"/>
+        <obj name="SiteRecordReferenceService" package="com.xmxc.generator.service" type="service"
+             filePath="/Users/apple/work/xmxc/code-generator/generator-server/src/main/java/com/xmxc/generator/service"/>
+        <obj name="SiteRecordReferenceServiceImpl" package="com.xmxc.generator.service" type="serviceImpl"
+             filePath="/Users/apple/work/xmxc/code-generator/generator-server/src/main/java/com/xmxc/generator/service"/>
+        <obj name="SiteRecordReferenceDao" package="com.xmxc.generator.dao" type="dao"
+             filePath="/Users/apple/work/xmxc/code-generator/generator-server/src/main/java/com/xmxc/generator/dao"/>
     </object>
 
     <!--
@@ -42,5 +42,14 @@
         filePath:model存储的磁盘目录
     -->
     <model name="SiteRecordReference" package="com.xmxc.generator.model" table="t_site_record_reference"
-           filePath="E:\work\generator\generator-server\src\main\java\com\xmxc\generator\model"/>
+           filePath="/Users/apple/work/xmxc/code-generator/generator-server/src/main/java/com/xmxc/generator/model"/>
+
+    <!--
+    数据库相关配置
+    url:数据库连接地址
+    username：用户名
+    password:密码
+    -->
+    <db url="jdbc:mysql://39.104.182.12:3306/sitedevelopment?useUnicode=true&amp;characterEncoding=UTF-8"
+        username="root" password="xmxc1234"/>
 </generator>

@@ -13,7 +13,7 @@ public class FileImportPackageHelper {
      * @param filePackageName
      * @param fileContent
      */
-    public static void getFileHeader(List<CreateMethodParam> methodParam, String filePackageName, StringBuffer fileContent, String fileType) {
+    public static void getFileHeader(List<CreateMethodParam> methodParam, String filePackageName, StringBuffer fileContent, String fileType, String modelPath) {
         fileContent.append("package " + filePackageName + " ;\n\n");
         Set<String> packageSet = new HashSet<>();
         for (CreateMethodParam createMethodParam : methodParam) {
@@ -40,6 +40,8 @@ public class FileImportPackageHelper {
         if ("dao".equals(fileType)) {
             fileContent.append("import org.springframework.stereotype.Repository;\n\n");
         }
+        fileContent.append("import java.util.List;\n");
+        fileContent.append("import " + modelPath + ";\n\n");
     }
 
 }

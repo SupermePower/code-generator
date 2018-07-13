@@ -1,13 +1,14 @@
-package com.xmxc.generator.test;
+package com.xmxc.generator.execute;
 
 import com.xmxc.generator.generator.ClassGenerator;
 import com.xmxc.generator.generator.EntityGenerator;
 import com.xmxc.generator.generator.InterfaceGenerator;
 import com.xmxc.generator.util.*;
+
 import java.util.List;
 import java.util.Map;
 
-public class GeneratorTest {
+public class ExecuteGenerator {
 
 
     public static void main(String[] args) {
@@ -15,28 +16,31 @@ public class GeneratorTest {
         ParserXMLHelper parserXMLHelper = new ParserXMLHelper();
 
         // 读取xml中创建方法配置
-//        List<CreateMethodParam> createMethodParams = parserXMLHelper.getCreateMethodsData();
-//
-//        // 读取xml中创建对象配置
-//        List<CreateObjectParam> createObjectData = parserXMLHelper.getCreateObjectData();
-//
-//        // 创建业务接口，数据映射接口
-//        createInterface(createObjectData, createMethodParams);
-//
-//        // 创建业务实现
-//        createClassTest(createObjectData, createMethodParams);
-//
-//        // 获取创建model数据
+        List<CreateMethodParam> createMethodParams = parserXMLHelper.getCreateMethodsData();
+
+        // 读取xml中创建对象配置
+        List<CreateObjectParam> createObjectData = parserXMLHelper.getCreateObjectData();
+
+        // 获取创建model数据
         Map<String, String> createModelData = parserXMLHelper.getCreateModelData();
-//
-//        // 获取数据库表结构相关数据
-        List<Map<String, String>> mapList = DBUtil.query(createModelData.get("table"));
+
+        // 获取连接数据库数据
+        Map<String, String> connectDBData = parserXMLHelper.getConnectDBData();
+
+        // 创建业务接口，数据映射接口
+        createInterface(createObjectData, createMethodParams, createModelData.get("name"), createModelData.get("package") + "." + createModelData.get("name"));
+
+        // 创建业务实现
+        createClassTest(createObjectData, createMethodParams, createModelData.get("package") + "." + createModelData.get("name"), createModelData.get("name"));
+
+        // 获取数据库表结构相关数据
+        List<Map<String, String>> mapList = DBUtil.query(connectDBData.get("url"), connectDBData.get("username"), connectDBData.get("password"), createModelData.get("table"));
 
         // model创建
         createModelTest(createModelData, mapList);
 
         // 创建mpper映射文件
-//        createMapperXmlTest(mapList, createMethodParams, createObjectData, createModelData);
+        createMapperXmlTest(mapList, createMethodParams, createObjectData, createModelData);
     }
 
     /**
@@ -46,12 +50,12 @@ public class GeneratorTest {
      * @param createMethodParams
      * @param createObjectData
      */
-    private static void createMapperXmlTest(List<Map<String, String>> mapList, List<CreateMethodParam> createMethodParams, List<CreateObjectParam> createObjectData, Map<String, String> createModelData) {
+    private static void createMapperXmlTest(List<Map<String, String>> mapList, List<CreateMethodParam> createMethodParams,
+                                            List<CreateObjectParam> createObjectData, Map<String, String> createModelData) {
         String namespace = "";
         String fileName = "";
         String filePath = "";
         String modelName = "";
-        String tableName = "";
         for (CreateObjectParam createObjectParam : createObjectData) {
             if ("dao".equals(createObjectParam.getFileType())) {
                 fileName = createObjectParam.getFileName() + ".xml";
@@ -60,7 +64,7 @@ public class GeneratorTest {
                 modelName = createModelData.get("package") + "." + createModelData.get("name");
             }
         }
-        CreateXmlHelper.createMapperXml(namespace, mapList, fileName, filePath, modelName, createMethodParams, tableName);
+        CreateXmlHelper.createMapperXml(namespace, mapList, fileName, filePath, modelName, createMethodParams, createModelData.get("table"));
     }
 
     /**
@@ -68,14 +72,15 @@ public class GeneratorTest {
      *
      * @param createObjectData
      */
-    private static void createInterface(List<CreateObjectParam> createObjectData, List<CreateMethodParam> createMethodParam) {
+    private static void createInterface(List<CreateObjectParam> createObjectData, List<CreateMethodParam> createMethodParam,
+                                        String modelName, String modelPath) {
         for (CreateObjectParam createObjectParam : createObjectData) {
             if (!"serviceImpl".equals(createObjectParam.getFileType())) {
                 String interfaceName = createObjectParam.getFileName();
                 String filePath = createObjectParam.getFilePath();
                 String filePackage = createObjectParam.getPackageName();
                 String fileType = createObjectParam.getFileType();
-                createInterfaceTest(interfaceName, filePath, filePackage, fileType, createMethodParam);
+                createInterfaceTest(interfaceName, filePath, filePackage, fileType, createMethodParam, modelName, modelPath);
             }
         }
     }
@@ -83,7 +88,8 @@ public class GeneratorTest {
     /**
      * 创建业务实现类
      */
-    private static void createClassTest(List<CreateObjectParam> createObjectData, List<CreateMethodParam> createMethodParam) {
+    private static void createClassTest(List<CreateObjectParam> createObjectData, List<CreateMethodParam> createMethodParam,
+                                        String modelPath, String modelName) {
         String filePath = "";
         String fileName = "";
         String callMapperType = "";
@@ -104,7 +110,8 @@ public class GeneratorTest {
                 callMapperPackage = createObjectParam.getPackageName();
             }
         }
-        ClassGenerator.createClass(filePath, fileName, filePackageName, createMethodParam, implementsInterface, callMapperType, callMapperPackage);
+        ClassGenerator.createClass(filePath, fileName, filePackageName, createMethodParam, implementsInterface,
+                callMapperType, callMapperPackage, modelPath, modelName);
     }
 
     /**
@@ -117,8 +124,8 @@ public class GeneratorTest {
     /**
      * 创建接口
      */
-    private static void createInterfaceTest(String interfaceName, String filePath, String filePackage, String fileType, List<CreateMethodParam> createMethodParam) {
-        InterfaceGenerator.createInterface(filePath, interfaceName, filePackage, createMethodParam, fileType);
+    private static void createInterfaceTest(String interfaceName, String filePath, String filePackage, String fileType,
+                                            List<CreateMethodParam> createMethodParam, String modelName, String modelPath) {
+        InterfaceGenerator.createInterface(filePath, interfaceName, filePackage, createMethodParam, fileType, modelName, modelPath);
     }
-
 }

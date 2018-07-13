@@ -10,20 +10,13 @@ import java.util.Map;
 
 @Component
 public class DBUtil {
-    public static final String URL = "jdbc:mysql://39.104.182.12:3306/sitedevelopment?useUnicode=true&amp;characterEncoding=UTF-8&useSSL=false";
-    public static final String USER = "root";
-    public static final String PASSWORD = "xmxc1234";
     private static Connection conn = null;
 
     static {
         try {
-            //1.加载驱动程序
+            //加载驱动程序
             Class.forName("com.mysql.jdbc.Driver");
-            //2. 获得数据库连接
-            conn = DriverManager.getConnection(URL, USER, PASSWORD);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -31,19 +24,37 @@ public class DBUtil {
     /**
      * 获取数据库连接
      *
+     * @param url      地址
+     * @param username 用户名
+     * @param password 密码
      * @return
      */
-    public static Connection getConnection() {
+    public static Connection getConnection(String url, String username, String password) {
+        try {
+            // 获得数据库连接
+            conn = DriverManager.getConnection(url, username, password);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return conn;
     }
 
-    public static List<Map<String, String>> query(String tableName) {
+    /**
+     * 查询指定表结构信息
+     *
+     * @param url       数据库地址
+     * @param username  用户名
+     * @param password  密码
+     * @param tableName 表名
+     * @return
+     */
+    public static List<Map<String, String>> query(String url, String username, String password, String tableName) {
         List<Map<String, String>> tableData = null;
         Connection conn = null;
         Statement stmt = null;
         ResultSet rs = null;
         try {
-            conn = getConnection();
+            conn = getConnection(url, username, password);
             stmt = conn.createStatement();
             rs = stmt.executeQuery("select column_name, data_type, column_type, column_comment, column_key " +
                     "from information_schema.columns where table_name='" + tableName + "'");

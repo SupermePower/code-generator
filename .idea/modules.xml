@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/generator-server/code-generator.iml" filepath="$PROJECT_DIR$/generator-server/code-generator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/generator-server/code-generator.iml" filepath="$PROJECT_DIR$/generator-server/code-generator.iml" />
     </modules>
   </component>
 </project>

@@ -1,7 +1,7 @@
 package com.xmxc.generator.generator;
 
-import com.xmxc.generator.util.FileHelper;
 import com.xmxc.generator.util.CreateMethodParam;
+import com.xmxc.generator.util.FileHelper;
 import com.xmxc.generator.util.FileImportPackageHelper;
 import com.xmxc.generator.util.StringUtil;
 
@@ -21,15 +21,16 @@ public class ClassGenerator {
      * @return
      */
     private static String getCreateClassStatement(String fileName, List<CreateMethodParam> methods, String filePackageName,
-                                                  String implementsInterface, String callMapperType, String callMapperPackage) {
+                                                  String implementsInterface, String callMapperType, String callMapperPackage, String modelPath, String modelName) {
         StringBuffer fileContent = new StringBuffer();
-        FileImportPackageHelper.getFileHeader(methods, filePackageName, fileContent, "serviceImpl");
+        FileImportPackageHelper.getFileHeader(methods, filePackageName, fileContent, "serviceImpl", modelPath);
         fileContent.append("import " + callMapperPackage + "." + callMapperType + ";\n\n");
         fileContent.append("@Service\n");
         fileContent.append("public class " + fileName + " implements " + implementsInterface + " {\n\n");
         callMapperType = callMapperType.substring(callMapperType.lastIndexOf(".") + 1);
         fileContent.append("    @Autowired\n");
         fileContent.append("    private " + callMapperType + " " + StringUtil.camelName(callMapperType) + ";\n\n");
+        getCommonMethods(fileContent, modelName, callMapperType);
         for (CreateMethodParam method : methods) {
             String returnType = method.getReturnType();
             if (!"void".equals(returnType)) {
@@ -76,15 +77,45 @@ public class ClassGenerator {
      * @param filePath            文件磁盘路径
      * @param className           文件名称
      * @param packageName         包名
-     * @param methods         方法集合
+     * @param methods             方法集合
      * @param implementsInterface 实现接口名称
      * @param callMapperType      调用接口名称
      * @param callMapperPackage   调用接口所在包路径
      */
     public static void createClass(String filePath, String className, String packageName, List<CreateMethodParam> methods,
-                                   String implementsInterface, String callMapperType, String callMapperPackage) {
-        String modelBody = getCreateClassStatement(className, methods, packageName, implementsInterface, callMapperType, callMapperPackage);
+                                   String implementsInterface, String callMapperType, String callMapperPackage, String modelPath, String modelName) {
+        String modelBody = getCreateClassStatement(className, methods, packageName, implementsInterface, callMapperType, callMapperPackage, modelPath, modelName);
         FileHelper fileHelper = new FileHelper();
         fileHelper.createMapperInterface(className, filePath, modelBody);
+    }
+
+    /**
+     * 创建基础方法
+     *
+     * @param modelName 实体
+     * @param callType  调用类型
+     * @return
+     */
+    public static void getCommonMethods(StringBuffer fileContent, String modelName, String callType) {
+        //查询全部
+        fileContent.append("\tpublic List<" + modelName + "> findAll() {\n");
+        fileContent.append("\t\treturn " + StringUtil.camelName(callType) + ".findAll();\n");
+        fileContent.append("\t}\n\n");
+        //根据主键查询
+        fileContent.append("\tpublic " + modelName + " findById(String id) {\n");
+        fileContent.append("\t\treturn " + StringUtil.camelName(callType) + ".findById(id);\n");
+        fileContent.append("\t}\n\n");
+        //删除
+        fileContent.append("\tpublic void deleteById(String id) {\n");
+        fileContent.append("\t\t" + StringUtil.camelName(callType) + ".deleteById(id);\n");
+        fileContent.append("\t}\n\n");
+        //修改
+        fileContent.append("\tpublic void update(" + modelName + " " + StringUtil.camelName(modelName) + ") {\n");
+        fileContent.append("\t\t" + StringUtil.camelName(callType) + ".update(" + StringUtil.camelName(modelName) + ");\n");
+        fileContent.append("\t}\n\n");
+        //新增
+        fileContent.append("\tpublic void save(" + modelName + " " + StringUtil.camelName(modelName) + ") {\n");
+        fileContent.append("\t\t" + StringUtil.camelName(callType) + ".save(" + StringUtil.camelName(modelName) + ");\n");
+        fileContent.append("\t}\n\n");
     }
 }

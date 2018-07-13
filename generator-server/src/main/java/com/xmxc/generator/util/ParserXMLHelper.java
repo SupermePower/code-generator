@@ -5,7 +5,6 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.util.*;
@@ -98,6 +97,29 @@ public class ParserXMLHelper {
     }
 
     /**
+     * 解析XML文档（db）
+     *
+     * @param fileName xml文件全路径名称
+     */
+    private static Map<String, String> parserDBXml(String fileName) {
+        File inputXml = new File(fileName);
+        SAXReader saxReader = new SAXReader();
+        Map<String, String> dbParam = new HashMap<>();
+        try {
+            Document document = saxReader.read(inputXml);       //SAX生成和解析XML文档
+            Element generator = document.getRootElement();   //获得根节点
+            Element object = generator.element("db");
+            dbParam.put("url", object.attributeValue("url"));
+            dbParam.put("username", object.attributeValue("username"));
+            dbParam.put("password", object.attributeValue("password"));
+        } catch (DocumentException e) {
+            log.error("解析XML文件失败(获取创建db信息) -> DocumentException ", e);
+        }
+        return dbParam;
+    }
+
+
+    /**
      * 获取创建model数据
      *
      * @return
@@ -108,7 +130,7 @@ public class ParserXMLHelper {
     }
 
     /**
-     * 获取创建model数据
+     * 获取创建object数据
      *
      * @return
      */
@@ -123,5 +145,15 @@ public class ParserXMLHelper {
     public List<CreateMethodParam> getCreateMethodsData() {
         String path = this.getClass().getResource("/generator.xml").getPath();
         return parserMethodsXml(path);
+    }
+
+    /**
+     * 获取连数据库数据
+     *
+     * @return
+     */
+    public Map<String, String> getConnectDBData() {
+        String path = this.getClass().getResource("/generator.xml").getPath();
+        return parserDBXml(path);
     }
 }
