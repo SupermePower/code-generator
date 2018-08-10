@@ -22,7 +22,7 @@ public class StringUtil {
         String camels[] = name.split("_");
         for (String camel : camels) {
             // 跳过原始字符串中开头、结尾的下换线或双重下划线
-            if (camel.isEmpty()) {
+            if (camel.isEmpty() || camel.equals("is")) {
                 continue;
             }
             // 处理真正的驼峰片段

@@ -75,11 +75,11 @@ public class InterfaceGenerator {
         //根据主键查询
         fileContent.append("\t" + modelName + " findById(String id);\n\n");
         //删除
-        fileContent.append("\tvoid deleteById(String id);\n\n");
+        fileContent.append("\tint deleteById(String id);\n\n");
         //修改
-        fileContent.append("\tvoid update(" + modelName + " " + StringUtil.camelName(modelName) + ");\n\n");
+        fileContent.append("\tint update(" + modelName + " " + StringUtil.camelName(modelName) + ");\n\n");
         //新增
-        fileContent.append("\tvoid save(" + modelName + " " + StringUtil.camelName(modelName) + ");\n\n");
+        fileContent.append("\tint save(" + modelName + " " + StringUtil.camelName(modelName) + ");\n\n");
     }
 
 }

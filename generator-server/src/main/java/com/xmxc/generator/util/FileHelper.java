@@ -4,12 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.dom4j.Document;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
-import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.nio.charset.Charset;
 
 @Slf4j
 public class FileHelper {
@@ -84,6 +82,7 @@ public class FileHelper {
             out = new FileWriter(file);
             //创建一个dom4j创建xml的对象
             writer = new XMLWriter(out, format);
+            writer.setEscapeText(false);
             //调用write方法将doc文档写到指定路径
             writer.write(doc);
             log.info("生成mybatis映射XML文件成功");

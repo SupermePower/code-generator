@@ -50,13 +50,13 @@ public class CreateXmlHelper {
                 delete.addAttribute("id", "deleteById");
                 if (createMethodParam.getParamList().size() == 1) {
                     delete.addAttribute("parameterType", createMethodParam.getParamList().get(0));
-                    delete.addCDATA(" \n update " + tableName + " set is_del = '0' " + " where id = #{id} ");
+                    delete.addCDATA(" \n update " + tableName + " set is_deleted = '0' " + " where id = #{id} ");
                 }
             }
         }
 
         //获取基本方法配置
-        getCommonMethod(tableName, mapper, pk, tableData, modelName);
+        getCommonMethod(tableName, mapper, pk, tableData, modelName, fileName);
 
 
         //将xml对象写入文件
@@ -71,25 +71,25 @@ public class CreateXmlHelper {
      * @param mapper
      * @param pKey
      */
-    private static void getCommonMethod(String tableName, Element mapper, String pKey, List<Map<String, String>> tableData, String modelPath) {
+    private static void getCommonMethod(String tableName, Element mapper, String pKey, List<Map<String, String>> tableData, String modelPath, String fileName) {
         //查询全部
         Element findAll = mapper.addElement("select");
         findAll.addAttribute("id", "findAll");
-        findAll.addAttribute("resultType", modelPath);
-        findAll.addText(" \n select * from " + tableName + " where is_del = '1' ");
+        findAll.addAttribute("resultMap", StringUtil.camelName(fileName).substring(0, StringUtil.camelName(fileName).indexOf(".")));
+        findAll.addText(" \n select * from " + tableName + " where is_deleted = '0' ");
 
         //根据主键获取
         Element findById = mapper.addElement("select");
         findById.addAttribute("id", "findById");
-        findById.addAttribute("resultType", modelPath);
+        findById.addAttribute("resultMap", StringUtil.camelName(fileName).substring(0, StringUtil.camelName(fileName).indexOf(".")));
         findById.addAttribute("parameterType", "java.lang.String");
-        findById.addText(" \n select * from " + tableName + " where " + pKey + " = #{id} and is_del = '1' ");
+        findById.addText(" \n select * from " + tableName + " where " + pKey + " = #{id} and is_deleted = '0' ");
 
         //删除数据-修改删除状态，假删除
         Element delete = mapper.addElement("delete");
-        delete.addAttribute("id", "delete");
+        delete.addAttribute("id", "deleteById");
         delete.addAttribute("parameterType", "java.lang.String");
-        delete.addText(" \n update " + tableName + " set is_del = '0' where " + pKey + " = #{id} ");
+        delete.addText(" \n update " + tableName + " set is_deleted = '1' where " + pKey + " = #{id} ");
 
         //更新数据
         Element update = mapper.addElement("update");
@@ -104,7 +104,7 @@ public class CreateXmlHelper {
                 anIf.addText(map.get("column_name") + "=#{" + StringUtil.camelName(map.get("column_name")) + "},");
             }
         }
-        update.addText("where " + pKey + " = #{id}");
+        update.addText("where " + pKey + " = #{" + StringUtil.camelName(pKey) + "}");
 
         //保存数据
         Element insert = mapper.addElement("insert");
@@ -114,7 +114,8 @@ public class CreateXmlHelper {
         insert.addAttribute("parameterType", modelPath);
         insert.addText(" \n insert into " + tableName + "\n");
         Element trimColumn = insert.addElement("trim");
-        trimColumn.addAttribute("prefix", "values (\" suffix=\")");
+        trimColumn.addAttribute("prefix", "(");
+        trimColumn.addAttribute("suffix", ")");
         trimColumn.addAttribute("suffixOverrides", ",");
         for (Map<String, String> map : tableData) {
             Element columnIf = trimColumn.addElement("if");
@@ -122,14 +123,14 @@ public class CreateXmlHelper {
             columnIf.addText(map.get("column_name") + ",");
         }
         Element trimValues = insert.addElement("trim");
-        trimValues.addAttribute("prefix", "values (\" suffix=\")");
+        trimValues.addAttribute("prefix", "values(");
+        trimValues.addAttribute("suffix", ")");
         trimValues.addAttribute("suffixOverrides", ",");
         for (Map<String, String> map : tableData) {
             Element valuesIf = trimValues.addElement("if");
             valuesIf.addAttribute("test", StringUtil.camelName(map.get("column_name")) + " != null");
             valuesIf.addText("#{" + StringUtil.camelName(map.get("column_name")) + "},");
         }
-        insert.addText("where " + pKey + " = #{id}");
     }
 
     /**

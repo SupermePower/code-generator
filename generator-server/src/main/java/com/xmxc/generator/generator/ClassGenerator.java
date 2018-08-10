@@ -35,8 +35,10 @@ public class ClassGenerator {
             String returnType = method.getReturnType();
             if (!"void".equals(returnType)) {
                 returnType = returnType.substring(returnType.lastIndexOf(".") + 1);
+                fileContent.append("@Override\n");
                 fileContent.append("    public " + returnType + " " + method.getMethodName() + "(");
             } else {
+                fileContent.append("@Override\n");
                 fileContent.append("    public void " + method.getMethodName() + "(");
             }
             String params = "";
@@ -98,24 +100,29 @@ public class ClassGenerator {
      */
     public static void getCommonMethods(StringBuffer fileContent, String modelName, String callType) {
         //查询全部
+        fileContent.append("\t@Override\n");
         fileContent.append("\tpublic List<" + modelName + "> findAll() {\n");
         fileContent.append("\t\treturn " + StringUtil.camelName(callType) + ".findAll();\n");
         fileContent.append("\t}\n\n");
         //根据主键查询
+        fileContent.append("\t@Override\n");
         fileContent.append("\tpublic " + modelName + " findById(String id) {\n");
         fileContent.append("\t\treturn " + StringUtil.camelName(callType) + ".findById(id);\n");
         fileContent.append("\t}\n\n");
         //删除
-        fileContent.append("\tpublic void deleteById(String id) {\n");
-        fileContent.append("\t\t" + StringUtil.camelName(callType) + ".deleteById(id);\n");
+        fileContent.append("\t@Override\n");
+        fileContent.append("\tpublic int deleteById(String id) {\n");
+        fileContent.append("\t\treturn " + StringUtil.camelName(callType) + ".deleteById(id);\n");
         fileContent.append("\t}\n\n");
         //修改
-        fileContent.append("\tpublic void update(" + modelName + " " + StringUtil.camelName(modelName) + ") {\n");
-        fileContent.append("\t\t" + StringUtil.camelName(callType) + ".update(" + StringUtil.camelName(modelName) + ");\n");
+        fileContent.append("\t@Override\n");
+        fileContent.append("\tpublic int update(" + modelName + " " + StringUtil.camelName(modelName) + ") {\n");
+        fileContent.append("\t\treturn " + StringUtil.camelName(callType) + ".update(" + StringUtil.camelName(modelName) + ");\n");
         fileContent.append("\t}\n\n");
         //新增
-        fileContent.append("\tpublic void save(" + modelName + " " + StringUtil.camelName(modelName) + ") {\n");
-        fileContent.append("\t\t" + StringUtil.camelName(callType) + ".save(" + StringUtil.camelName(modelName) + ");\n");
+        fileContent.append("\t@Override\n");
+        fileContent.append("\tpublic int save(" + modelName + " " + StringUtil.camelName(modelName) + ") {\n");
+        fileContent.append("\t\treturn " + StringUtil.camelName(callType) + ".save(" + StringUtil.camelName(modelName) + ");\n");
         fileContent.append("\t}\n\n");
     }
 }
